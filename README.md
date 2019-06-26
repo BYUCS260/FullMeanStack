@@ -1,7 +1,7 @@
 # FullMeanStack
-Hints for creating an Angular application
+Hints for creating an application from scratch with Vue/Node/Mongo
 
-In this tutorial you will create an Angular application that will implement comments for a blog. You will allow the users to create comments and then upvote other people's comments. Much of this tutorial is taken from this Flapper News site and you may want to look at it if you get stuck. The following steps will use express to set up your project and then build the front and back end in the project.
+In this tutorial you will create an application that will implement comments for a blog. You will allow the users to create comments and then upvote other people's comments. Much of this tutorial is taken from this Flapper News site and you may want to look at it if you get stuck. The following steps will use express to set up your project and then build the front and back end in the project.
 First create an express project
 ```
 express comment
@@ -10,7 +10,7 @@ npm install
 npm start
 ```
 This will start a web server on port 3000. Take a look at the file in bin/www which is a node.js app that is run with "npm start". Files in the "public" directory will be served by the node server.
-Lets get started with a simple Angular application with the following view "index.html" that we will create inside of the "public" directory.
+Lets get started with a simple Vue application with "index.html" inside of the "public" directory.
 ```
 <html>
 <head>
