@@ -10,33 +10,44 @@ npm install
 npm start
 ```
 This will start a web server on port 3000. Take a look at the file in bin/www which is a node.js app that is run with "npm start". Files in the "public" directory will be served by the node server.
-Lets get started with a simple Vue application with "index.html" inside of the "public" directory.
+Lets get started with a simple Vue application "index.html" inside of the "public" directory.
 ```
+<!DOCTYPE html>
 <html>
+
 <head>
+  <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+  <meta charset="utf-8">
   <title>Comments</title>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-  <script src="javascripts/app.js"></script>
 </head>
-<body ng-app="comment" ng-controller="MainCtrl">
-  <div>
+
+<body>
+  <div id="app">
     {{test}}
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="javascripts/app.js"></script>
 </body>
 </html>
 ```
-Now create the controller in "public/javascripts/app.js".
+Now create the javascript in "public/javascripts/app.js".
 ```
-angular.module('comment', [])
-.controller('MainCtrl', [
-  '$scope',
-  function($scope){
-    $scope.test = 'Hello world!';
+/*global axios */
+/*global Vue */
+var app = new Vue({
+  el: '#app',
+  data: {
+    test: "Hello World",
+  },
+  created: function() {
+  },
+  methods: {
   }
-]);
+});
 ```
-You now have your hello world Angular app.
-Now we are going to modify the controller to include some new model data with comments.
+You now have your hello world Vue app.
+Now we are going to modify the javascript to include some new data with comments.
 ```
     $scope.comments = [
       'Comment 1',
