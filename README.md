@@ -84,84 +84,91 @@ And change the view to show upvotes.
                 {{item.title}} - upvotes: {{item.upvotes}}
             </li>
 ```
-Of course, you want to sort the comments based on popularity, so include a filter.
+Of course, you want to sort the comments based on popularity, so include a computed property "sortedComments".
 ```
-<div ng-repeat="comment in comments | orderBy: '-upvotes'">
-{{comment.title}} - upvotes: {{comment.upvotes}}
-</div>
+            <li v-for="item in sortedComments">
+                {{item.title}} - upvotes: {{item.upvotes}}
+            </li>
 ```
-Now that we have the list displayed, it would be nice to add comments to the list. First create a controller function that will add an object to the comments array.
+And specify the javascript sort function in your computed property.
 ```
-    $scope.addComment = function() {
-      $scope.comments.push({title:'A new comment',upvotes:0});
-    };
+    computed: {
+        sortedComments() {
+            return this.comments.sort((a, b) => {
+                var rval = 0;
+                if(a.upvotes > b.upvotes) {
+                    rval = 1;
+                } else if(a.upvotes < b.upvotes) {
+                    rval = -1;
+                }
+                return(rval);
+            })
+        }
+
+    },
 ```
-Then add a button to call the function in your html file.
+Test your application to make sure the comments are sorted by upvotes.  Now that we have the list displayed, it would be nice to add comments to the list. First create a function that will add an object to the comments array.
 ```
-<button ng-click="addComment()">Add Comment</button>
+    methods: {
+        addComment() {
+            this.comments.push({ title: this.newComment, upvotes: 0 });
+            this.newComment = "";
+        },
+    }
+```
+Then add a form to call the function in your html file.
+```
+        <form v-on:submit.prevent="addComment">
+            <input type="text" v-model="newComment">
+            <button type="submit">Add</button>
+        </form>
 ```
 Make sure everything is working. You should see the new comment in your list.
-Now we want to allow the user to enter custom comment data. So create a form.
-```
-  <form ng-submit="addComment()">
-    <input type="text" ng-model="formContent"></input>
-    <button type="submit">Add Comment</button>
-  </form>
-```
-And modify the controller to get the data from the model. The controller will also clear the form.
-```
-    $scope.addComment = function() {
-      $scope.comments.push({title:$scope.formContent,upvotes:0});
-      $scope.formContent='';
-    };
-```
+
 Now that we have the ability to add comments, we ought to allow the user to upvote the comments he likes. Next to each comment, we will place a click-able character that the user can select to increment the upvotes. Notice that the parameter to incrementUpvotes is passed by reference so the list is automatically rearranged.
 First, modify the html to have the clickable character
 
 ```
-  <div ng-repeat="comment in comments | orderBy: '-upvotes'">
-    <span ng-click="incrementUpvotes(comment)">^</span>
-    {{comment.title}} - upvotes: {{comment.upvotes}}
-  </div>
+            <li v-for="item in sortedComments">
+                <span v-on:click="incrementUpvotes(item)">^</span>{{item.title}} - upvotes: {{item.upvotes}}
+            </li>
 ```
-Then add the function to the controller app.js
+Then add the function to app.js
 ```
-    $scope.incrementUpvotes = function(comment) {
-      comment.upvotes += 1;
-    };
+        incrementUpvotes(item){
+            item.upvotes = item.upvotes+1;
+        }
 ```
 The click in the view called the controller which changed the model which then updated the order in the view.
 Now lets make things look a little better. Use the bootstrap css to spruce things up.
 ```
+<!DOCTYPE html>
 <html>
+
 <head>
-  <title>Comments</title>
-  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-  <script src="javascripts/app.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>Comments</title>
 </head>
-<body ng-app="comment" ng-controller="MainCtrl">
-<div class="row">
-<div class="col-md-6 col-md-offset-3">
-<div class="page-header"> 
-  <h1>Comments </h1>
-</div>
 
-  <form ng-submit="addComment()" style = "margin-top30px;">
-    <input type="text" ng-model="formContent"></input>
-    <button type="submit">Add Comment</button>
-  </form>
-  <div>
-    {{test}}
-  </div>
-  <div ng-repeat="comment in comments | orderBy: '-upvotes'">
-    <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(comment)"></span>
-    {{comment.title}} - upvotes: {{comment.upvotes}}
-  </div>
-</div>
-</div>
+<body>
+    <div id="app">
+        <form v-on:submit.prevent="addComment">
+            <input type="text" v-model="newComment">
+            <button type="submit">Add</button>
+        </form>
+        <ul>
+            <li v-for="item in sortedComments">
+                <span class="glyphicon glyphicon-thumbs-up" v-on:click="incrementUpvotes(item)"></span> {{item.title}} - upvotes: {{item.upvotes}}
+            </li>
+        </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+    <script src="javascripts/app.js"></script>
 </body>
+
 </html>
 ```
 Test the front end to make sure everything is working so we can attach the back end.
