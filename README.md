@@ -49,35 +49,40 @@ var app = new Vue({
 You now have your hello world Vue app.
 Now we are going to modify the javascript to include some new data with comments.
 ```
-    $scope.comments = [
+  data: {
+    comments : [
       'Comment 1',
       'Comment 2',
       'Comment 3',
       'Comment 4',
       'Comment 5'
-    ];
+    ],
+    test: "Hello World",
+  },
 ```
-And add some Angular code to display the comments.
+And add some Vue code to display the comments.
 ```
-<div ng-repeat="comment in comments">
-{{comment}}
-</div>
+        <ul>
+            <li v-for="item in comments">
+                {{ item }}
+            </li>
+        </ul>
 ```
 Now lets add upvotes to our comments and make each array element an object.
 ```
-    $scope.comments = [
+    comments : [
       {title:'Comment 1', upvotes:5},
       {title:'Comment 2', upvotes:6},
       {title:'Comment 3', upvotes:1},
       {title:'Comment 4', upvotes:4},
       {title:'Comment 5', upvotes:3}
-    ];
+    ],
 ```
 And change the view to show upvotes.
 ```
-<div ng-repeat="comment in comments">
-{{comment.title}} - upvotes: {{comment.upvotes}}
-</div>
+            <li v-for="item in comments">
+                {{item.title}} - upvotes: {{item.upvotes}}
+            </li>
 ```
 Of course, you want to sort the comments based on popularity, so include a filter.
 ```
