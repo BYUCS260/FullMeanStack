@@ -324,56 +324,67 @@ You should now be able to test your route using curl. First access the route to 
 curl -X PUT http://localhost:3000/comments/<COMMENT ID>/upvote
 ```
 Now use the URL to make sure that the upvote count was incremented.
-Now that our backend is working, we just need to wire it up to our angular frontend. First we will create a getAll() function to retrieve comments from our REST service in public/javascripts/app.js.
+Now that our backend is working, we just need to wire it up to our vue frontend. First we will create a getAll() function to retrieve comments from our REST service in public/javascripts/app.js.
 ```
-  $scope.getAll = function() {
-    return $http.get('/comments').success(function(data){
-      angular.copy(data, $scope.comments);
-    });
-  };
+        async getall() {
+            console.log("get all");
+            var url = "http://yourserver:4200/comments"; // This is the route we set up in index.js
+            try {
+                let response = await axios.get(url);
+                this.comments = response.data; // Assign array to returned response
+                console.log(this.comments);
+                return true;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
 ```
-You will need to inject the $http service into your controller.
+
+Upon success, we will copy the data from the GET REST service into our this.comments array. Vue will update the displayed html. 
+You will want to call getall() when the app is created with
 ```
-angular.module('comment', [])
-.controller('MainCtrl', [
-  '$scope','$http',
-  function($scope,$http){
+    created: function() {
+        this.getall();
+    },
 ```
-Upon success, we will copy the data from the GET REST service into our $scope comments array. The angular.copy function will update the view. Now we just need to find a way to call getAll at the right time.
 Now that you have implemented one backend interface, the others should be easy. Lets modify the addComment function to write the output to the mongo database.
-First make a 'create' function that will write a comment to the database.
 ```
-  $scope.create = function(comment) {
-    return $http.post('/comments', comment).success(function(data){
-      $scope.comments.push(data);
-    });
-  };
+        addComment() {
+            var url = "http://clementbyu.com:4200/comments";
+            axios.post(url, {
+                    title: this.newComment,
+                    upvotes: 0
+                })
+                .then(response => {
+                    console.log("Post Response "); 
+                    console.log(response.data);
+                    this.comments.push(response.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+            console.log(this.comments);
+            this.newComment = "";
+        },
 ```
-When the call to the /comments REST service is successful, the data will be pushed onto the comments array. Now you just need to call this function from your addComment function.
-```
-      if($scope.formContent === '') { return; }
-      console.log("In addComment with "+$scope.formContent);
-      $scope.create({
-        title: $scope.formContent,
-        upvotes: 0,
-      });
-      $scope.formContent = '';
-```
+When the call to the POST /comments REST service is successful, the object with the _id field will be returned in response.data. In the .then block, we can push this complete object onto the array so that the upvote will know the _id to send to the back end.
+
 Test this function to make sure you can create new comments and see them displayed. You should be able to refresh the page and still see them.
-Now you need to be able to save the upvoting for your comments. Follow the same process of creating a function to save out the upvote using your PUT REST route, then add it to the upvote function.
+
+Now you need to be able to upvote your comments. Follow the same process of adding an axios call your PUT REST route. We want to avoid race conditions between different browsers accessing the same comment, so we will replace our view of the number of upvotes with the response data. 
 ```
-    $scope.upvote = function(comment) {
-      return $http.put('/comments/' + comment._id + '/upvote')
-        .success(function(data){
-          console.log("upvote worked");
-          comment.upvotes += 1;
-        });
-    };
-```
-And then in our controller, we simply replace incrementUpvotes() with this:
-```
-    $scope.incrementUpvotes = function(comment) {
-      $scope.upvote(comment);
-    };
+        incrementUpvotes(item) {
+            var url = "http://clementbyu.com:4200/comments/"+item._id+"/upvote";
+            axios.put(url)
+                .then(response => {
+                    console.log(response.data.upvotes);
+                    item.upvotes = response.data.upvotes;
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+            console.log("URL "+url);
+        }
 ```
 Test to make sure the upvotes are maintained across refreshes.
