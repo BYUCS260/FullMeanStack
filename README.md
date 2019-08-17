@@ -1,7 +1,8 @@
 # FullStack
 Hints for creating an application from scratch with Vue/Node/Mongo
 
-In this tutorial you will create an application that will implement comments for a blog. You will allow the users to create comments and then upvote other people's comments. Much of this tutorial is taken from this Flapper News site and you may want to look at it if you get stuck. The following steps will use express to set up your project and then build the front and back end in the project.
+In this tutorial you will create an application that will implement comments for a blog. You will allow the users to create comments and then upvote other people's comments. The following steps will use express to set up your project and then build the front and back end in the project.
+
 First create an express project
 ```
 express comment
