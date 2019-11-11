@@ -180,17 +180,7 @@ Now we will install Mongoose which will provide schemas on top of mongodb.
 npm install --save mongoose
 ```
 The --save flag updates the packages.json file with mongoose so you can easily restore them with a "npm install" command.
-You may get an error saying something like
 
-lib/kerberos.h:5:27: fatal error: gssapi/gssapi.h: No such file or directory
-This is a good time to figure out how to install packages. If you google for this error, you will find that the kerberos library is not installed. To fix this use:
-```
-sudo apt-get install libkrb5-dev
-```
-Then rebuild your npm modules
-```
-sudo npm rebuild
-```
 Lets look at the express project structure
 The node project created by express has the following directory structure:
 app.js - This file is the launching point for our app. We use it to import all other server files including modules, configure routes, open database connections, and just about anything else we can think of.
@@ -205,7 +195,7 @@ In addition to the above files structure, we are going to add one more folder. C
 mkdir models
 ```
 This folder will contain our Mongoose schema definitions.
-Now we are going to set up the mongo database for the node.js backend. We will use mongoose to set up the schema. Chapter 16 of the book discusses mongoose in detail. Add the following code to the top of your app.js file [right after require('body-parser')] to connect to the mongod. Make sure that mongod is running on your instance.
+Now we are going to set up the mongo database for the node.js backend. We will use mongoose to set up the schema. Chapter 16 of the book discusses mongoose in detail. Add the following code to the top of your app.js file [right before 'var indexRouter = require('./routes/index');'] to connect to the mongod. Make sure that mongod is running on your instance.
 ```
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/comments');
