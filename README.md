@@ -304,7 +304,7 @@ The :comment part of the URL will be the ID given to the comment in mongo. So, y
 ```
 http://YOURIP/comments/54f4b19425b53f6a052851ce
 ```
-Now let's implement the route to allow upvoting. We will use our middleware to identify the comment and then open up a route on this comment to upvote it. Add the upvote method to the models/Comments.js schema.
+Now let's implement the route to allow upvoting. We will use our middleware to identify the comment and then open up a route on this comment to upvote it. Add the upvote method to the models/Comments.js schema.  Make sure this goes before "mongoose.model('Comment', CommentSchema);"
 ```
 CommentSchema.methods.upvote = function(cb) {
   this.upvotes += 1;
