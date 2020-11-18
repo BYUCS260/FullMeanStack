@@ -14,7 +14,7 @@ var http = require('http');
 
 var port = parseInt(process.env.PORT, 10) || 3000;
 app.set('port', port);
-
+console.log("Server on port ",port);
 /**
  * Create HTTP server.
  */
