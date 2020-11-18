@@ -319,7 +319,7 @@ Now that our backend is working, we just need to wire it up to our vue frontend.
 ```
         async getall() {
             console.log("get all");
-            var url = "http://yourserver:4200/comments"; // This is the route we set up in index.js
+            var url = "/comments"; // This is the route we set up in index.js
             try {
                 let response = await axios.get(url);
                 this.comments = response.data; // Assign array to returned response
@@ -342,7 +342,7 @@ You will want to call getall() when the app is created with
 Now that you have implemented one backend interface, the others should be easy. Lets modify the addComment function to write the output to the mongo database.
 ```
         addComment() {
-            var url = "http://clementbyu.com:4200/comments";
+            var url = "/comments";
             axios.post(url, {
                     title: this.newComment,
                     upvotes: 0
@@ -366,7 +366,7 @@ Test this function to make sure you can create new comments and see them display
 Now you need to be able to upvote your comments. Follow the same process of adding an axios call your PUT REST route. We want to avoid race conditions between different browsers accessing the same comment, so we will replace our view of the number of upvotes with the response data. 
 ```
         incrementUpvotes(item) {
-            var url = "http://clementbyu.com:4200/comments/"+item._id+"/upvote";
+            var url = "/comments/"+item._id+"/upvote";
             axios.put(url)
                 .then(response => {
                     console.log(response.data.upvotes);
