@@ -359,6 +359,12 @@ Now that you have implemented one backend interface, the others should be easy. 
             this.newComment = "";
         },
 ```
+And add the newComment to our data
+```
+  data: {
+    test: "Hello World",
+    newComment: "",
+```
 When the call to the POST /comments REST service is successful, the object with the _id field will be returned in response.data. In the .then block, we can push this complete object onto the array so that the upvote will know the _id to send to the back end.
 
 Test this function to make sure you can create new comments and see them displayed. You should be able to refresh the page and still see them.
