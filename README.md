@@ -124,6 +124,12 @@ Then add a form to call the function in your html file.
             <button type="submit">Add</button>
         </form>
 ```
+And add the newComment to our data
+```
+  data: {
+    test: "Hello World",
+    newComment: "",
+```
 Make sure everything is working. You should see the new comment in your list.
 
 Now that we have the ability to add comments, we ought to allow the user to upvote the comments he likes. Next to each comment, we will place a click-able character that the user can select to increment the upvotes. Notice that the parameter to incrementUpvotes is passed by reference so the list is automatically rearranged.
@@ -359,12 +365,7 @@ Now that you have implemented one backend interface, the others should be easy. 
             this.newComment = "";
         },
 ```
-And add the newComment to our data
-```
-  data: {
-    test: "Hello World",
-    newComment: "",
-```
+
 When the call to the POST /comments REST service is successful, the object with the _id field will be returned in response.data. In the .then block, we can push this complete object onto the array so that the upvote will know the _id to send to the back end.
 
 Test this function to make sure you can create new comments and see them displayed. You should be able to refresh the page and still see them.
